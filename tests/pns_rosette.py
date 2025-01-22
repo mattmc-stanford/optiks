@@ -1,9 +1,9 @@
-from src.optiks.optiks import optiks
-from src.optiks.loss_functions import *
+from optiks.optiks import optiks
+from optiks.loss_functions import *
 import matplotlib
 matplotlib.use("webagg")
-from src.optiks.options import *
-from src.optiks.utils import rosetteTraj
+from optiks.options import *
+from optiks.utils import rosetteTraj
 
 # Setting hardware options==============================================================================================
 hw = HardwareOpts(gfin=0, gmax=10, smax=19.5, dt=4e-3)

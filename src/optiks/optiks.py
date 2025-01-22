@@ -8,9 +8,9 @@ import matplotlib.patches as patches
 from os import environ
 import warnings
 from tqdm import tqdm
-from src.optiks.options import *
-from src.optiks.utils import *
-from src.optiks.loss_functions import custom_loss
+from optiks.options import *
+from optiks.utils import *
+from optiks.loss_functions import custom_loss
 
 
 def optiks(C, hwopts=HardwareOpts(), dsopts=DesignOpts(), svopts=SolverOpts()):
