@@ -2,7 +2,6 @@ from src.optiks.optiks import optiks
 from src.optiks.loss_functions import *
 import matplotlib
 matplotlib.use("webagg")
-from scipy.io import savemat
 from src.optiks.options import *
 from src.optiks.utils import rosetteTraj
 
@@ -41,5 +40,3 @@ sv = SolverOpts(ds=5e-5, maxiter=500, count=50, derate=0.9)
 
 # Designing gradient waveforms==========================================================================================
 C_v, t_sf, g_sf, s_sf, g_usf, s_usf, g_last = optiks(C_m, hwopts=hw, dsopts=des, svopts=sv)
-
-savemat('../Waveforms/current_run.mat', {'gsafe': g_sf, 'gunsafe': g_usf, 'trajectory': C_v, 'glast': g_last}, format='4')

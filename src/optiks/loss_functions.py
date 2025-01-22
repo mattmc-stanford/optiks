@@ -1,7 +1,7 @@
 from functools import reduce
 import numpy as np
 import torch
-from utils import tensorInterp
+from src.optiks.utils import tensorInterp
 
 
 def custom_loss(v, T, g, dt, smax, weights, rv=False, params=None):

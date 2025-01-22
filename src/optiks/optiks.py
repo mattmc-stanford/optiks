@@ -1,6 +1,6 @@
 import time
 from scipy.interpolate import CubicSpline, interp1d
-from scipy.integrate import cumtrapz
+from scipy.integrate import cumulative_trapezoid
 import matplotlib
 matplotlib.use("webagg")
 import matplotlib.pyplot as plt
@@ -9,7 +9,7 @@ from os import environ
 import warnings
 from tqdm import tqdm
 from src.optiks.options import *
-from utils import *
+from src.optiks.utils import *
 from src.optiks.loss_functions import custom_loss
 
 
@@ -85,7 +85,7 @@ def optiks(C, hwopts=HardwareOpts(), dsopts=DesignOpts(), svopts=SolverOpts()):
     # Miki uses an arbitrary parametrization, but I've had better success with p as an initial arclength calculation
     Cp = np.diff(C, axis=0)
     Cp = np.vstack((Cp, Cp[-1]))
-    p = cumtrapz(np.linalg.norm(Cp, axis=1), axis=0, initial=0)
+    p = cumulative_trapezoid(np.linalg.norm(Cp, axis=1), axis=0, initial=0)
     Lp = p[-1]
     PP = CubicSpline(p, C)
 
@@ -97,7 +97,7 @@ def optiks(C, hwopts=HardwareOpts(), dsopts=DesignOpts(), svopts=SolverOpts()):
     # Find length of the curve
     Cp = np.diff(CC, axis=0) / dp  # tangent curve as function of p
     Cp = np.vstack((Cp, Cp[-1]))
-    s_of_p = cumtrapz(np.linalg.norm(Cp, axis=1), axis=0, initial=0) * dp  # arclength as function of p
+    s_of_p = cumulative_trapezoid(np.linalg.norm(Cp, axis=1), axis=0, initial=0) * dp  # arclength as function of p
     L = s_of_p[-1]  # Length of curve
 
     # Decide ds and compute st for the first point
@@ -134,7 +134,7 @@ def optiks(C, hwopts=HardwareOpts(), dsopts=DesignOpts(), svopts=SolverOpts()):
     # If a solution was passed as an argument use this as initial v(s)
     if not initsol is None:
         initv_of_t = np.linalg.norm(np.diff(initsol, axis=0), axis=1) / dt
-        inits_of_t = cumtrapz(initv_of_t * dt, axis=0, initial=0)
+        inits_of_t = cumulative_trapezoid(initv_of_t * dt, axis=0, initial=0)
         init = interp1d(inits_of_t, initv_of_t, kind='linear')(s[s <= inits_of_t[-1]])
         init = np.hstack((init, init[-1]*np.ones_like(s[s > inits_of_t[-1]])))
         init[0] = st0
@@ -244,7 +244,7 @@ def optiks(C, hwopts=HardwareOpts(), dsopts=DesignOpts(), svopts=SolverOpts()):
     g = torch.diff(Cnew, dim=0) / gamma / dt
     gf = torch.fft.rfft(g, dim=0, n=g.detach().shape[0] * 10) * dt
     freq = torch.fft.rfftfreq(g.detach().shape[0] * 10, d=dt)
-    ktrue = gamma * cumtrapz(g.detach().cpu().numpy(), axis=0, initial=0) * dt
+    ktrue = gamma * cumulative_trapezoid(g.detach().cpu().numpy(), axis=0, initial=0) * dt
 
     init = torch.tensor(init, device=device)
     t_of_s = torch.cumulative_trapezoid(1 / init * ds)
@@ -496,7 +496,7 @@ def initSolution(C, g0=None, gfin=None, gmax=4, smax=15, dt=4e-3, ds=None, rv=Fa
     # Represent the curve using spline with parametrization p
     Cp = np.diff(C, axis=0)
     Cp = np.vstack((Cp, Cp[-1]))
-    p = cumtrapz(np.linalg.norm(Cp, axis=1), axis=0, initial=0)
+    p = cumulative_trapezoid(np.linalg.norm(Cp, axis=1), axis=0, initial=0)
     Lp = p[-1]
     PP = CubicSpline(p, C)
 
@@ -508,7 +508,7 @@ def initSolution(C, g0=None, gfin=None, gmax=4, smax=15, dt=4e-3, ds=None, rv=Fa
     # Find length of the curve
     Cp = np.diff(CC, axis=0) / dp
     Cp = np.vstack((Cp, Cp[-1]))
-    s_of_p = cumtrapz(np.linalg.norm(Cp, axis=1), axis=0, initial=0) * dp
+    s_of_p = cumulative_trapezoid(np.linalg.norm(Cp, axis=1), axis=0, initial=0) * dp
     L = s_of_p[-1]
 
     # Decide ds and compute st for the first point
@@ -579,7 +579,7 @@ def initSolution(C, g0=None, gfin=None, gmax=4, smax=15, dt=4e-3, ds=None, rv=Fa
     st = np.min([sta, stb], axis=0)
 
     # Compute time
-    t_of_s = cumtrapz(1 / st * ds)
+    t_of_s = cumulative_trapezoid(1 / st * ds)
     t_of_s = np.hstack((0, t_of_s))
     t = np.arange(0, t_of_s[-1] + 1e-10, dt)
 
