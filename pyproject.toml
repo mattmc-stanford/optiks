@@ -1,0 +1,21 @@
+[build-system]
+requires = [
+   "setuptools",
+   "wheel",
+    "matplotlib >= 3.5.1",
+    "scipy >= 1.12.0",
+    "numpy >= 1.26.4",
+    "torch >= 2.0.1",
+    "pandas >= 2.2.1",
+    "tornado >= 6.4"
+]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "optiks"
+version = "0.0.1"
+authors = [
+  { name="Matthew McCready", email="mattmc@stanford.edu" },
+]
+description = "A package for optimal arbitrary trajectory gradient waveform design."
+readme = "README.md"
