@@ -53,15 +53,6 @@ def optiks(C, hwopts=HardwareOpts(), dsopts=DesignOpts(), svopts=SolverOpts()):
     Notes
     -----
     (c) Matthew McCready 2024.
-
-
-    :param params:  Tuple of additional parameters necessary for loss function (e.g. mechanical resonance band frequency
-                    edges, PNS filters, etc.). Default None.
-    :param rv:      Rotationally variant flag. If true, the design is rotationally variant, optimized for orientation of
-                    input trajectory C. Default False.
-    :param initsol: Initialization for gradient descent. If None, the time optimal waveform is used with the input
-                    derating factor. Default None.
-
     """
     # Unpacking inputs==================================================================================================
     g0 = hwopts.g0  # initial gradient (G/cm)

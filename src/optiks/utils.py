@@ -5,7 +5,7 @@ from io import BytesIO
 import pandas as pd
 
 
-def spiralTraj(fov, res, nshots=1, npoints=7e3):
+def spiralTraj(fov, res, nshots=1, npoints=int(7e3)):
     """
     Designs a spiral trajectory in arbitrary parameterization with the desired k-space coverage.
 
@@ -38,7 +38,7 @@ def spiralTraj(fov, res, nshots=1, npoints=7e3):
     return C
 
 
-def rosetteTraj(res, n1=7, n2=5, npoints=1e3):
+def rosetteTraj(res, n1=7, n2=5, npoints=int(1e3)):
     """
     Designs a rosette trajectory in arbitrary parameterization with the desired k-space coverage.
 

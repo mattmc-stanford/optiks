@@ -7,7 +7,7 @@ This package is intended for the design of arbitrary k-space trajectory gradient
 
 ## Installation / Setup
 
-Good luck.
+From the command line call: pip install git+https://github.com/mattmc-stanford/optiks.git
 
 ## Organization
 

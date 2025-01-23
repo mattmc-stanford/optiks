@@ -20,10 +20,6 @@ class HardwareOpts:
         Maximum slew rate [G/cm/ms]. Default 15 G/cm/ms.
     dt : float, optional
         Sampling time interval for returned waveform [ms]. Default 4e-3 (4us).
-
-    Notes
-    -----
-    (c) Matthew A. McCready 2024
     """
     g0: float = None  # initial gradient (G/cm)
     gfin: float = None  # final gradient (G/cm)
@@ -62,10 +58,7 @@ class DesignOpts:
                       Siemens system.
 
         An optional key should be added for passing parameters to each new custom loss function term you define.
-
-    (c) Matthew A. McCready 2024
     """
-    bound: float = None  # maximum allowed waveform duration (ms)
     weights: dict = None  # dictionary of weights for terms in custom loss function
     params: dict = None  # dictionary of terms and parameters for custom loss function
     rv: bool = False  # flag for rotationally variant waveform design
@@ -89,10 +82,6 @@ class SolverOpts:
         Default None.
     lr : float, optional
         Initial learning rate for AdamW gradient descent optimizer. Default 1e-4.
-
-    Notes
-    -----
-    (c) Matthew A. McCready 2024
     """
     ds: float = None  # arc-length sampling for design (cm^-1)
     maxiter: int = 4000  # maximum allowed number of gradient descent steps

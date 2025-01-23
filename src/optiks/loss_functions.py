@@ -12,7 +12,7 @@ def custom_loss(v, T, g, dt, smax, weights, rv=False, params=None):
     Parameters
     ----------
     v : tensor
-        K-space speed as a function of arc-length v(s) [cm^-1 / s]
+        K-space speed as a function of arc-length v(s) [cm^-1 / ms]
     T : tensor float
         Duration of the gradient waveform [ms]
     g : tensor
@@ -255,7 +255,14 @@ def acoustic_min(v, T, g, dt, smax, weights, rv=False, params=None):
 
 def acoustic_freq_min(v, T, g, dt, smax, weights, rv=False, params=None):
     """
+    Minimizes waveform power spectrum weighted by acoustic response function.
 
+    Parameters
+    ----------
+    weights : dict
+        Uses key 'acousticfreq'
+    params : dict
+        Uses key 'acousticfreq' with value list []
     """
     pd = g.shape[0]
     G = torch.nn.functional.pad(g.T, (pd, pd)).T
@@ -273,6 +280,16 @@ def acoustic_freq_min(v, T, g, dt, smax, weights, rv=False, params=None):
 
 
 def smooth_reg(v, T, g, dt, smax, weights, rv=False, params=None):
+    """
+    Performs minimum energy regularization on the first difference of k-space speed as a function of arc-length.
+
+    Parameters
+    ----------
+    weights : dict
+        Uses key 'regularization'
+    v : tensor
+        K-space speed as a function of arclength v(s) [cm^-1 / ms]
+    """
     term = weights['regularization'] * torch.norm(torch.diff(v)) ** 2
 
     return term

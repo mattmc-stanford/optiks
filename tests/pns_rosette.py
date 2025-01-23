@@ -5,6 +5,11 @@ matplotlib.use("webagg")
 from optiks.options import *
 from optiks.utils import rosetteTraj
 
+"""
+This script designs a 1mm, 7 leaf rosette for the GE 3T UHP system with a maximum PNS threshold of 80% as calculated
+using the IEC 60601-2-33 model.
+"""
+
 # Setting hardware options==============================================================================================
 hw = HardwareOpts(gfin=0, gmax=10, smax=19.5, dt=4e-3)
 
@@ -36,7 +41,7 @@ weights = {'time': 1e4,
 des = DesignOpts(params=params, weights=weights)
 
 # Setting solver options================================================================================================
-sv = SolverOpts(ds=5e-5, maxiter=500, count=50, derate=0.9)
+sv = SolverOpts(ds=5e-5, maxiter=25000, count=50, derate=0.9)
 
 # Designing gradient waveforms==========================================================================================
 C_v, t_sf, g_sf, s_sf, g_usf, s_usf, g_last = optiks(C_m, hwopts=hw, dsopts=des, svopts=sv)
