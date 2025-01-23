@@ -67,4 +67,4 @@ des = DesignOpts(params=params, weights=weights)
 sv = SolverOpts(ds=5e-5, maxiter=15000, count=50, derate=0.85)
 
 # Designing gradient waveforms==========================================================================================
-C_v, t_sf, g_sf, s_sf, g_usf, s_usf, g_last = optimGradientRIV(C_m, hwopts=hw, dsopts=des, svopts=sv)
+C_v, t_sf, g_sf, s_sf, g_usf, s_usf, g_last = optiks(C_m, hwopts=hw, dsopts=des, svopts=sv)
