@@ -1,5 +1,8 @@
 from dataclasses import dataclass
+
+import torch
 from numpy import ndarray
+from utils import get_free_gpu
 
 
 @dataclass
@@ -82,6 +85,8 @@ class SolverOpts:
         Default None.
     lr : float, optional
         Initial learning rate for AdamW gradient descent optimizer. Default 1e-4.
+    device : torch.device, optional
+        Device to use for all tensors in optimization. Defaults to emptiest GPU (or to CPU if no GPU's are detected).
     """
     ds: float = None  # arc-length sampling for design (cm^-1)
     maxiter: int = 4000  # maximum allowed number of gradient descent steps
@@ -89,3 +94,4 @@ class SolverOpts:
     derate: float = 0.8  # factor to derate initial (time optimal) solution v(s) by before optimizing
     initsol: ndarray = None  # custom initial waveform solution - replaces time optimal solution (G/cm)
     lr: float = 1e-4  # initial learning rate for AdamW optimizer
+    device: torch.device = torch.device(get_free_gpu() if torch.cuda.is_available() else 'cpu')  # emptiest GPU

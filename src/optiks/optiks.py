@@ -133,7 +133,7 @@ def optiks(C, hwopts=HardwareOpts(), dsopts=DesignOpts(), svopts=SolverOpts()):
     # Preparing optimization variable and moving variables to Torch=====================================================
 
     environ['CUDA_DEVICE_ORDER'] = 'PCI_BUS_ID'  # make GPU ID match that of nvitop
-    device = torch.device(get_free_gpu() if torch.cuda.is_available() else 'cpu')  # automatically choose emptiest GPU
+    device = svopts.device
 
     weights['time'] = weights['time'] / np.trapz(ds / init)  # normalizing timing weight by time optimal duration
 

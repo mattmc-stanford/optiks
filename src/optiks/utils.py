@@ -3,6 +3,7 @@ import numpy as np
 import subprocess
 from io import BytesIO
 import pandas as pd
+from os import environ
 
 
 def spiralTraj(fov, res, nshots=1, npoints=int(7e3)):
@@ -131,6 +132,7 @@ def get_free_gpu():
     -----
     (c) Matthew A. McCready 2024
     """
+    environ['CUDA_DEVICE_ORDER'] = 'PCI_BUS_ID'  # make GPU ID match that of nvitop
     print('Selecting GPU with largest free memory...')
     gpu_stats = subprocess.check_output(["nvidia-smi", "--format=csv", "--query-gpu=memory.used,memory.free"])
     gpu_df = pd.read_csv(BytesIO(gpu_stats),
