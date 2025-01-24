@@ -1,3 +1,5 @@
+![alt text](https://github.com/mattmc-stanford/optiks/blob/main/OPTIKS_LOGO.png?raw=true)
+
 # OPTIKS
 
 Optimizied (gradient) Properties through Timing In K-Space.
