@@ -26,6 +26,8 @@ pip install -e .
 
 Diagrams and overview here.
 
+![alt text](https://github.com/mattmc-stanford/optiks/blob/main/Algorithm.png?raw=true)
+
 ## Example Scripts
 
 Examples can be found under:
