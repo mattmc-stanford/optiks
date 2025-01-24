@@ -28,7 +28,8 @@ Diagrams and overview here.
 
 ## Example Scripts
 
-Link to them.
+Examples can be found under:
+https://github.com/mattmc-stanford/optiks/tree/main/tests
 
 ## Debugging
 
