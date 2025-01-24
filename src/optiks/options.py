@@ -2,7 +2,7 @@ from dataclasses import dataclass
 
 import torch
 from numpy import ndarray
-from utils import get_free_gpu
+from optiks.utils import get_free_gpu
 
 
 @dataclass
