@@ -38,11 +38,7 @@ hw = HardwareOpts(gfin=gfin, gmax=7, smax=13.5, dt=4e-3)
 # Setting design options================================================================================================
 Pthresh = 100*0.72
 system = "PREMIER"
-if system == "MAGNUS":
-    r = 52.2
-    c = 611e-6
-    alpha = 0.324
-elif system == "UHP":
+if system == "UHP":
     r = 26.5
     c = 359e-6
     alpha = 0.37
@@ -54,10 +50,10 @@ ATF = loadmat('acoustic_response_functions/larf_PREMIER.mat')
 params = [ATF['larf'], ATF['freqs']]
 params[1] = torch.tensor(params[1]/1e3).flatten()
 params[0] = torch.tensor(params[0][:, :-1])
-params = {'terms': [time_bound, slew_lim, acoustic_freq_min],
+params = {'terms': [time_bound, slew_lim, acoustic_freq_min],  # Note PNS is not limited in the optimization
           'bound': 27,
           'acousticfreq': params,
-          'pns': [Pthresh, r, c, alpha]}
+          'pns': [Pthresh, r, c, alpha]}  # including PNS in the params dict ensures it will be plotted with the results
 weights = {'time': 5e2,
            'slew': 9e2,
            'acoustic': 1e5}

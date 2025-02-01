@@ -21,11 +21,7 @@ C_m = np.hstack((np.real(C), np.imag(C))).astype(float)
 # Setting design options================================================================================================
 Pthresh = 100*0.8
 system = "UHP"
-if system == "MAGNUS":
-    r = 52.2
-    c = 611e-6
-    alpha = 0.324
-elif system == "UHP":
+if system == "UHP":
     r = 26.5
     c = 359e-6
     alpha = 0.37
