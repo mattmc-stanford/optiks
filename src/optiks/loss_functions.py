@@ -101,12 +101,15 @@ def slew_lim(v, T, g, dt, smax, weights, rv=False, params=None):
         Maximum allowed slew-rate [G/cm/ms]
     weights : dict
         Uses key 'slew'
+    params : dict, optional
+        Uses key 'slew', entirely optional to include. Has only one value: delta_s, the delta parameter used for the
+        "leaky" log-barrier function (default 2e-4).
     """
     if not rv:
         sr = torch.norm(torch.diff(g, dim=0), dim=1) / dt
     else:
         sr = torch.abs(torch.diff(g, dim=0) / dt)
-    dx = torch.tensor(0.0002)
+    dx = torch.tensor(0.0002) if 'slew' not in params.keys() else params['slew']
     sr[:3] = sr[:3] + smax/4
     term = weights['slew'] * (-torch.sum(torch.log(torch.relu(smax - sr[sr < (smax - dx)])))
                         + torch.sum(sr[sr >= (smax - dx)] / dx - torch.log(dx) + (1 - smax / dx))) / sr.detach().numel()
@@ -126,7 +129,8 @@ def pns_lim(v, T, g, dt, smax, weights, rv=False, params=None):
         Uses key 'pns'
     params : dict
         Uses key 'pns' with value list [Pthresh, r, c, a] the maximum allowed PNS threshold, rheobase, chronaxie time,
-        and the effective coil length as in IEC 60601-2-33.
+        and the effective coil length as in IEC 60601-2-33. Optionally [Pthresh, r, c, a, dp] where dp is the delta
+        parameter used for the "leaky" log-barrier (default 5e-5).
 
     Notes
     -----
@@ -148,7 +152,7 @@ def pns_lim(v, T, g, dt, smax, weights, rv=False, params=None):
     stim = torch.fft.fftshift(torch.fft.ifft(torch.fft.ifftshift(P, dim=1)), dim=1)[:, pd:-pd]
 
     stim = 100 * torch.norm(stim.squeeze(), dim=0)
-    dp = torch.tensor(0.00005)
+    dp = torch.tensor(0.00005) if len(params['pns']) == 4 else params['pns'][4]
     term = weights['pns'] * (torch.sum(torch.relu(-torch.log(params['pns'][0] - stim[stim < (params['pns'][0] - dp)]) + 0.7))
         + torch.sum(stim[stim >= (params['pns'][0] - dp)] / dp - torch.log(dp) + (1 - params['pns'][0] / dp))) / stim.detach().numel()
 
@@ -168,7 +172,8 @@ def safemodel_lim(v, T, g, dt, smax, weights, rv=False, params=None):
         Uses key 'safemodel'
     params : dict
         Uses key 'safemodel' with value list [Pthresh, hardware] the maximum allowed PNS threshold, and the
-        SimpleNamespace object defining SAFE model hardware parameters as used in PulseSeq.
+        SimpleNamespace object defining SAFE model hardware parameters as used in PulseSeq. Optionally
+        [Pthresh, hardware, dp] where dp is the delta parameter used for the "leaky" log-barrier (default 5e-5).
 
     Notes
     -----
@@ -213,7 +218,7 @@ def safemodel_lim(v, T, g, dt, smax, weights, rv=False, params=None):
         stim += ((coil.a1 * torch.abs(p[:, 0]) + coil.a2 * p[:, 1] + coil.a3 * torch.abs(p[:, 2])) / coil.stim_limit * coil.g_scale * 100) ** 2
 
     stim = torch.sqrt(stim)
-    dp = torch.tensor(0.00005)
+    dp = torch.tensor(0.00005) if len(params['safemodel']) == 2 else params['safemodel'][2]
     term = weights['pns'] * (torch.sum(torch.relu(-torch.log(params['safemodel'][0] - stim[stim < (params['safemodel'][0] - dp)]) + 0.7))
         + torch.sum(stim[stim >= (params['safemodel'][0] - dp)] / dp - torch.log(dp) + (1 - params['safemodel'][0] / dp))) / stim.detach().numel()
     return term

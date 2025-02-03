@@ -55,7 +55,32 @@ from optiks.utils import spiralTraj  # optional
 
 ## Debugging
 
-Coming soon.
+#### Runaway Time Waveforms:
+Occasionally the solver tries to design waveforms with a great deal of dead-time where effectively nothing is happening.
+Despite the time minimization term it can find this advantageous. If you are struggling with this issue try switching to
+the bound time loss term. Hopefully this bug will be fixed in the future.
+
+
+#### Bound Time Loss Term:
+If the duration of the waveform at any point during gradient descent exceeds the upper bound set by the user, the
+log-barrier function will evaluate to infinity and gradient descent will likely fail to recover.
+
+This can be avoided by; **a)** ensuring the initial solution (derate * time optimal, or custom initial solution) is
+shorter than the upper bound, **b)** Using a smaller learning rate, **c)** using a larger weight on the bound time term,
+or **d)** using a higher slew-rate together with a pns-limiting term to design a faster waveform.
+
+#### Slew-Rate and PNS Violations:
+If you are struggling with slew-rate or PNS threshold being violated there are a few steps that can be taken; **a)**
+Lowering the learning rate, **b)** finer arc-length domain sampling (ds), **c)** adjusting weights or allowing more time
+if bound time is being used, or **d)** adjusting the delta parameters of the leaky log-barrier functions - smaller
+deltas leads to stronger enforcement.
+
+#### The "Leaky" Log-Barrier:
+For time-domain constraints such as slew-rate and PNS limits gradient descent in the arc-length domain can easily 
+violate log-barriers in the time-domain. To relax these constraints we introduce the "leaky" log-barrier function which
+becomes linear after some point x<sub>max</sub> - &delta;.
+
+![alt text](https://github.com/mattmc-stanford/optiks/blob/main/leaky_logb_wb.png?raw=true)
 
 ## References
 _Paper coming soon_

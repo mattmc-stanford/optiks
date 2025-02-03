@@ -53,12 +53,15 @@ class DesignOpts:
         'terms' - a list of function handles to loss function terms defined in loss_functions.py
     Optional keys: (one for each corresponding term used containing necessary parameters)
         'pns'       - a list containing [Pthresh, r, c, alpha] the maximum allowed PNS threshold, rheobase, chronaxie
-                      time, and the effective coil length as in IEC 60601-2-33.
+                      time, and the effective coil length as in IEC 60601-2-33. Optionally [Pthresh, r, c, alpha, dp]
+                      with dp for leaky log-barrier.
         'frequency' - a list containing mechanical resonance band edges [[low1, high1], [low2, high2], ...]
         'acoustic'  - a list containing [ARF, ARF_frequencies] the acoustic response function in the frequency domain,
                       and the frequencies it is evaluated at.
         'safemodel' - a list containing [Pthresh, hardware] where hardware is a SimpleNamespace as in PulseSeq for a
-                      Siemens system.
+                      Siemens system. Optionally [Pthresh, hardware, dp] with dp for pns leaky log-barrier.
+        'slew'      - Completely optional, slew_lim loss term can be used without this key in params. Contains only
+                      delta for slew leaky log-barrier.
 
         An optional key should be added for passing parameters to each new custom loss function term you define.
     """
